@@ -21,7 +21,7 @@ const TablaProductos = ({
               {nombre}
             </h3>
             <span className="text-sm font-normal text-gray-500">
-              Esta es su lista de productos
+              Esta es su lista de {nombre.toLowerCase()}
             </span>
           </div>
           <div className="flex sm:justify-center space-x-6">
@@ -67,14 +67,45 @@ const TablaProductos = ({
                     </tr>
                   </thead>
                   <tbody className="bg-white">
-                    {data.map(({ id, nombre, cantidad, precio_venta }, i) => (
+                    {nombre=="productos"?
+                      data?.map(({ id, nombre, cantidad, precio_venta }, i) => (
+                      
+                        <tr key={i}>
+                          <td
+                            className="p-4 whitespace-nowrap text-sm 
+                            font-normal text-gray-900"
+                          >
+                            <Link href={`/productos/${id}`}>
+                              {nombre}
+                              {/* <span className="font-semibold">
+                              Bonnie Green
+                            </span> */}
+                            </Link>
+                          </td>
+                          <td
+                            className="p-4 whitespace-nowrap 
+                            text-sm font-normal text-gray-500"
+                          >
+                            {cantidad}
+                          </td>
+                          <td
+                            className="p-4 whitespace-nowrap text-sm
+                             font-semibold text-gray-900"
+                          >
+                            ${precio_venta}
+                          </td>
+                        </tr>
+                      ))
+                    :
+                    data?.map(({ id, numero, cliente,proveedor, precioTotal }, i) => (
+                      
                       <tr key={i}>
                         <td
                           className="p-4 whitespace-nowrap text-sm 
                           font-normal text-gray-900"
                         >
-                          <Link href={`/productos/${id}`}>
-                            {nombre}
+                          <Link href={`/facturas/${id}`}>
+                            {numero}
                             {/* <span className="font-semibold">
                             Bonnie Green
                           </span> */}
@@ -84,16 +115,23 @@ const TablaProductos = ({
                           className="p-4 whitespace-nowrap 
                           text-sm font-normal text-gray-500"
                         >
-                          {cantidad}
+                          {cliente}
+                        </td>  <td
+                          className="p-4 whitespace-nowrap 
+                          text-sm font-normal text-gray-500"
+                        >
+                          {proveedor}
                         </td>
                         <td
                           className="p-4 whitespace-nowrap text-sm
                            font-semibold text-gray-900"
                         >
-                          ${precio_venta}
+                          ${precioTotal}
                         </td>
                       </tr>
-                    ))}
+                    ))
+                    }
+                   
                   </tbody>
                 </table>
               </div>

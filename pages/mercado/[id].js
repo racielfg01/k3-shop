@@ -13,6 +13,8 @@ import { AdminLayout } from "../../components";
 import usePocketBase from "../../hooks/usePocketBase";
 import { Record } from "pocketbase";
 import { StarIcon } from "@heroicons/react/24/solid";
+import { setAddItemToCart, setOpenCart } from "../../contexts/CartSlice";
+import { useDispatch } from "react-redux";
 // import ReactStars from "react-stars";
 
 // let db = new Localbase("db");
@@ -26,6 +28,7 @@ const Detalles = () => {
   const [showDetails, setShowDetails] = useState(true);
   const [index, setIndex] = useState(0);
   const {
+    id,
     nombre,
     descripcion,
     detalles,
@@ -39,6 +42,26 @@ const Detalles = () => {
     etiquetas,
     valoracion,
   } = articulo !== undefined ? articulo : "";
+
+  const dispatch = useDispatch();
+  const ifCartState = true;
+
+  const onAddToCart = () => {
+    let img = files[0];
+    let precio = precio_venta;
+    // const item = { id, title, text, img, color, shadow, price };
+    const item = { id, img, nombre, precio, valoracion };
+    dispatch(setAddItemToCart(item));
+  };
+
+  const onCartToggle = () => {
+    // si el producto no esta agrgar 1
+    dispatch(
+      setOpenCart({
+        cartState: true,
+      })
+    );
+  };
 
   useEffect(() => {
     const getArticulo = async () => {
@@ -54,10 +77,11 @@ const Detalles = () => {
 
   const getFiles = () => {
     images?.map(async (img, idx) => {
-      console.log("🚀 ~ file: [id].js:60 ~ images?.map ~ articulo", articulo);
-      let url = await getFileUrl(articulo, img);
-      files[idx] = url;
-      setDummy(Math.random());
+      if(articulo!==''){
+        let url = await getFileUrl(articulo, img);
+        files[idx] = url;
+        setDummy(Math.random());
+      }
     });
   };
 
@@ -74,14 +98,45 @@ const Detalles = () => {
   return (
     <AdminLayout>
       <div className="flex ">
-        <div className=" bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 w-full   ">
-          <div className=" flex justify-around gap-2">
-            <div className="flex p-4 sm:p-6 xl:p-8  2xl:col-span-2">
+        {/* <div className=" bg-white shadow rounded-lg p-2 sm:p-6 xl:p-8 w-full   "> */}
+        <div
+          className={`blur-effect-theme duration-500 rounded-lg p-2 sm:p-6 xl:p-8 w-full
+           max-w-xl absolute opacity-100 visible translate-x-0`}
+        >
+          <div className="mb-4 flex  justify-between">
+            <div className="flex-shrink-0">
+              <Link href={`/mercado`}>
+                <button
+                  className="button-theme bg-theme-cart text-white text-sm 
+                    font-medium rounded-l"
+                >
+                  Atrás
+                </button>
+              </Link>
+            </div>
+            {/* <div className="flex-shrink-0">
+                  <Link href={`/productos/edit/${query.id}`}></Link>
+                  <button
+                    className="bg-cyan-600 text-white text-sm 
+              font-medium  hover:bg-cyan-400 rounded-lg p-2"
+                  >
+                    Editar
+                  </button>
+                </div> */}
+          </div>
+          <div className=" flex justify-around gap-6">
+            <div className="flex  2xl:col-span-2 ">
               <div>
-                <div className="flex  items-center">
-                  <img
-                    className="w-full object-contain "
+                <div className="flex items-center">
+                  <Image
+                    className="h-60 w-full object-contain rounded-lg"
                     src={files[0]}
+                    // width={500}
+                    // height={500}
+                    fill="contain"
+                    priority
+                    // blurDataURL={files[0]}
+                    // placeholder="blur"
                     alt="producto"
                   />
                 </div>
@@ -99,48 +154,38 @@ const Detalles = () => {
             </div>
 
             <div>
-              <div className="mb-4 flex  justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Detalles
-                  </h3>
-                </div>
-                <div className="flex-shrink-0">
-                  <Link href={`/productos/edit/${query.id}`}></Link>
-                  <button
-                    className="bg-cyan-600 text-white text-sm 
-              font-medium  hover:bg-cyan-400 rounded-lg p-2"
-                  >
-                    Editar
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-col mt-8">
+              <div className="flex flex-col ">
                 <div className="overflow-x-auto rounded-lg">
                   <div className="align-middle inline-block min-w-full">
-                    <div className="text-2xl text-cyan-800">{nombre}</div>
-                    <div className="flex justify-between">
-                      <p className="text-black">${precio_venta}</p>
-                      <div className="flex justify-start mb-2 my-1">
+                    <div className="text-2xl text-gray-700 mb-6">{nombre}</div>
+                    <div className="flex justify-between mb-4 mx-6">
+                      <p className="text-black font-mono text-lg">
+                        ${precio_venta}
+                      </p>
+                      <div className="flex justify-start mb-2 my-1 ">
                         <StarIcon className="icon-style w-5 h-5 md:w-4 md:h-4 fill-amber-400" />
                         <p className="text-black">{valoracion}/5</p>
                       </div>
                     </div>
+                    <p className="text-black flex justify-start text-sm mb-4">
+                      Descripcion: {descripcion}
+                    </p>
+
                     {/* Select Cantidad  */}
                     <div
-                      className="inline-flex rounded-md shadow-sm"
+                      className="inline-flex rounded-md shadow-sm mb-2"
                       role="group"
                     >
                       <button
-                        className="bg-cyan-600 text-white text-xl 
-              font-medium  hover:bg-cyan-400 w-8 p-1 h-8"
+                        className="bg-theme-cart text-white flex justify-center
+                        text-2xl font-medium w-8 p-1 h-8"
                       >
                         -
                       </button>
                       <input type="text" className="w-10 h-8" placeholder="1" />
                       <button
-                        className="bg-cyan-600 text-white text-xl 
-              font-medium  hover:bg-cyan-400 w-8  h-8"
+                        className="bg-theme-cart text-white flex justify-center
+                        text-xl font-medium w-8 p-1 h-8"
                       >
                         +
                       </button>
@@ -148,50 +193,50 @@ const Detalles = () => {
 
                     <div className="my-2 flex justify-center">
                       <button
-                        className="bg-white border border-cyan-600 text-cyan-600 text-sm 
-              font-medium  hover:bg-cyan-600 rounded-lg p-2 mr-6"
+                        className="bg-white border border-gray-700 text-gray-700 text-sm 
+              font-medium  hover:bg-gray-200 rounded-lg p-2 mr-6"
+                        onClick={() => onAddToCart()}
                       >
                         Añadir al carrito
                       </button>
                       <button
-                        className="bg-cyan-600 text-white text-sm 
-              font-medium  hover:bg-cyan-400 rounded-lg p-2"
+                        className="button-theme bg-theme-cart text-white text-sm 
+                        font-medium rounded-lg p-2"
+                        onClick={() => onCartToggle()}
                       >
                         Comprar Ahora
                       </button>
                     </div>
-                    <p className="text-black ">{descripcion}</p>
-
-                    <div class="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
-                      <div class="py-5">
-                        <details class="group">
-                          <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
-                            <span> Detalles</span>
-                            <span class="transition group-open:rotate-180">
-                              <svg
-                                fill="none"
-                                height="24"
-                                shape-rendering="geometricPrecision"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="1.5"
-                                viewBox="0 0 24 24"
-                                width="24"
-                              >
-                                <path d="M6 9l6 6 6-6"></path>
-                              </svg>
-                            </span>
-                          </summary>
-                          <p class="text-neutral-600 mt-3 group-open:animate-fadeIn">
-                            {detalles}
-                          </p>
-                        </details>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
+            <div className="py-5">
+              <details className="group">
+                <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
+                  <span> Detalles</span>
+                  <span className="transition group-open:rotate-180">
+                    <svg
+                      fill="none"
+                      height="24"
+                      shapeRendering="geometricPrecision"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
+                      viewBox="0 0 24 24"
+                      width="24"
+                    >
+                      <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                  </span>
+                </summary>
+                <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
+                  {detalles}
+                </p>
+              </details>
             </div>
           </div>
         </div>

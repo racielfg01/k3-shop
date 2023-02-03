@@ -9,7 +9,7 @@ const AdminLayout = ({ children }) => {
       <div>
         <Navbar />
         <Cart />
-        <BarraLateral />
+        {/* <BarraLateral /> */}
         <div className="flex overflow-hidden  pt-16">
           <div
             className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10"

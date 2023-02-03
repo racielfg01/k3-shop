@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 
 import { StarIcon, ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { setAddItemToCart, setOpenCart } from "../../app/CartSlice";
+import { setAddItemToCart, setOpenCart } from "../../contexts/CartSlice";
 import Image from "next/image";
 
 const Item = ({

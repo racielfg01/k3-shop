@@ -1,21 +1,19 @@
 import Link from "next/link";
-import { Record } from "pocketbase";
+import { ListResult } from "pocketbase";
+// import { ListRecord } from "pocketbase";
 import  { useContext, useEffect, useState, useReducer } from "react";
 import { AdminLayout, Layout } from "../../components";
 import {  TablaProductos } from "../../components/adminComponents";
 
 import { ArticuloContext } from "../../contexts/ArticuloContext";
 import usePocketBase from "../../hooks/usePocketBase";
-// import Localbase from "localbase";
-
-
 
 
 const Productos = () => {
 //   const { articulos, alert, setAlert, dispatch } = useContext(ArticuloContext);
   const [buscar, setBuscar] = useState("");
-  const [productos, setProductos] = useState<Record[]>([]);
-  const { getFullList } = usePocketBase();
+  const [productos, setProductos] = useState <ListResult>();
+  const { getList } = usePocketBase();
   const columnNames=["Nombre","Cantidad","Precio"];
 
   // let total = `Total - ${
@@ -68,7 +66,7 @@ const Productos = () => {
       // let db = new Localbase("db");
       try {
         // const articulos = await db.collection("articulos").get();
-        const articulos =await getFullList("productos");
+        const articulos =await getList("productos");
         // dispatch({ type: "SCYNC_ARTICULO", articulos });
         setProductos(articulos);
       } catch (error) {

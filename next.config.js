@@ -13,4 +13,15 @@
 
 module.exports = {
   reactStrictMode: true,
+  images: {
+    domains: ['buylink.pockethost.io'],
+    // remotePatterns: [
+    //   {
+    //     protocol: 'https',
+    //     hostname: 'buylink.pockethost.io',
+    //     port: '',
+    //     pathname: '/api/files/**',
+    //   },
+    // ],
+  },
 }

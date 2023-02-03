@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTotalQTY, setOpenCart } from "../app/CartSlice.js";
+import { selectTotalQTY, setOpenCart } from "../contexts/CartSlice.js";
 
 
 import {
@@ -98,7 +98,7 @@ const Navbar = () => {
             <Image
               src={logo}
               alt="logo/img"
-              className={`w-16 h-auto ${navState && "filter brightness-0"}`}
+              className={`w-20 h-auto ${navState && "filter brightness-0"}`}
             />
           </Link>
           </div>

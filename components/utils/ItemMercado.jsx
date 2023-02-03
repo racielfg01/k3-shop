@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 
 import { StarIcon, ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { setAddItemToCart, setOpenCart } from "../../app/CartSlice";
+import { setAddItemToCart, setOpenCart } from "../../contexts/CartSlice";
 import Image from "next/image";
 import Link from "next/link";
 import usePocketBase from "../../hooks/usePocketBase";
@@ -36,7 +36,10 @@ producto
   const dispatch = useDispatch();
 
   const onAddToCart = () => {
-    const item = { id, title, text, img, color, shadow, price };
+    let img=files[0]
+    let precio=precio_venta
+    // const item = { id, title, text, img, color, shadow, price };
+    const item = { id,img,nombre,precio, valoracion };
     dispatch(setAddItemToCart(item));
   };
 

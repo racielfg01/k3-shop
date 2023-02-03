@@ -7,8 +7,7 @@ import { useEffect, useState } from "react";
 
 
 function  usePocketBase() {
-  // const [pb, setPb] = useState();
-  // const [pb, setPb] = useState();
+ 
   // console.log("PB_ONLINE",process.env.PB_ONLINE);
 
   // const isLogged = pb.authStore.isValid?true:false;
@@ -84,15 +83,20 @@ function  usePocketBase() {
   //Productos
 
   // fetch a paginated records list
-  const getProductos = async () =>
-    await pb.collection("productos").getList(1, 50, {
+  const getList = async (collection) =>{
+
+    const pb = await initPocketBase();
+    const res =await pb.collection(collection).getList(1, 50, {
       sort: "-created",
     });
+    return res;
+  }
+
 
   // getFile url {'thumb': '100x250'}
   const getFileUrl = async(record, filename, thumb) =>{
     const pb = await initPocketBase();
-    const result= pb.getFileUrl(record, filename, { thumb: "100x250" });
+    const result= pb.getFileUrl(record, filename,thumb);
     return result;
   }
 
@@ -110,11 +114,13 @@ function  usePocketBase() {
   //getFullList
   const getFullList = async (collection) => {
     const pb = await initPocketBase();
-    const result = await pb
+    const result =  pb
       .collection(collection)
       .getFullList(200 /* batch size */, {
         sort: "-created",
       });
+   
+
     return result;
   };
 
@@ -139,7 +145,7 @@ function  usePocketBase() {
     loginUser,
     logoutUser,
     // isLogged,
-    getProductos,
+    getList,
     getFileUrl,
     getRecordID,
     getFullList,

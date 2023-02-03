@@ -14,7 +14,7 @@ const Ventas = ({ ifExists,productos }) => {
             : "grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1"
         }`}
         >
-          {productos?.map((item, i) => (
+          {productos?.items?.map((item, i) => (
             <Item {...item} key={i} ifExists={ifExists} />
           ))}
         </div>

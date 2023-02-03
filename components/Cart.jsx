@@ -8,7 +8,7 @@ import {
   setClearCartItems,
   setCloseCart,
   setGetTotals
-} from "../app/CartSlice.js";
+} from "../contexts/CartSlice.js";
 import CartCount from "./cart/CartCount";
 import CartEmpty from "./cart/CartEmpty";
 import CartItem from "./cart/CartItem";

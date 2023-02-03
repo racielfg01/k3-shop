@@ -3,7 +3,7 @@ import "../styles/App.css";
 
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
-import Store from "../app/Store.js";
+import Store from "../contexts/Store.js";
 import { Toaster } from "react-hot-toast";
 
 

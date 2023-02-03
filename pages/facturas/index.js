@@ -1,36 +1,17 @@
-import React, { useContext, useEffect, useState, useReducer } from "react";
-import { ClienteContext } from "../../contexts/ClienteContext";
-import { AddOutlined, Close } from "@mui/icons-material";
-import {
-  Alert,
-  // Button,
-  // Card,
-  CardHeader,
-  Container,
-  // Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Link from "next/link";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-// import ItemListClient from "../../components/ItemListClient";
-import { blue, red } from "@mui/material/colors";
-import Localbase from "localbase";
-import ItemList from "../../components/ItemListFact";
-import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
-import { Text, Card, Input, Spacer, Row,Grid,Button } from "@nextui-org/react";
-import Body from "../../components/Body";
-import Buscar from "../../components/Buscar";
-
+import { useContext, useEffect, useState, useReducer } from "react";
+import { AdminLayout } from "../../components";
+import { TablaProductos } from "../../components/adminComponents";
+import usePocketBase from "../../hooks/usePocketBase";
 
 const Facturas = () => {
-  const { facturasC, alert, setAlert, dispatch } = useContext(ClienteContext);
-  const [buscar, setBuscar] = useState("");
-  const [existBusq, setExistBusq] = useState(false);
-  const [facturas, setFacturas] = useState([]);
-  const [facturasB, setFacturasB] = useState([]);
+    const { getList } = usePocketBase();
+    const [facturas, setFacturas] = useState([]);
+    const columnNames=["Número","Cliente","Proveedor","Precio Total"];
+    
+    //   const { facturasC, alert, setAlert, dispatch } = useContext(ClienteContext);
+//   const [buscar, setBuscar] = useState("");
+//   const [existBusq, setExistBusq] = useState(false);
+//   const [facturasB, setFacturasB] = useState([]);
 
   // let total = facturas
   //   ? facturas.length == 1
@@ -39,81 +20,81 @@ const Facturas = () => {
   //   : `Total - 0 facturas`;
   // const handleAlertClose = () => setAlert(0);
 
-  const buscarFacturas = () => {
-    if (facturasC !== undefined) {
-      const res = facturasC.filter((factura) => porCliente(factura));
-      setFacturasB(res);
-    }
-  };
+//   const buscarFacturas = () => {
+//     if (facturasC !== undefined) {
+//       const res = facturasC.filter((factura) => porCliente(factura));
+//       setFacturasB(res);
+//     }
+//   };
 
-  const closeBuscar = () => {
-    setExistBusq(false);
-    setFacturas(facturas);
-  };
+//   const closeBuscar = () => {
+//     setExistBusq(false);
+//     setFacturas(facturas);
+//   };
 
-  const porCliente = (cliente) => {
-    return cliente.nombre.toLowerCase().includes(buscar)||cliente.nombre.includes(buscar);
-  };
+//   const porCliente = (cliente) => {
+//     return (
+//       cliente.nombre.toLowerCase().includes(buscar) ||
+//       cliente.nombre.includes(buscar)
+//     );
+//   };
 
   //  const porApellidos = (cliente) => {
   //   return cliente.apellidos.toLowerCase().includes(buscar)||cliente.apellidos.includes(buscar);
   // };
 
-  const handleChange = (event) => {
-    let { value } = event.target;
-    setBuscar(value);
-    buscarFacturas();
-  };
+//   const handleChange = (event) => {
+//     let { value } = event.target;
+//     setBuscar(value);
+//     buscarFacturas();
+//   };
 
-  const deleteItem = (id) => {
-    const res = facturas.filter((val) => val.id !== id);
-    setFacturas(res);
-    setAlert(2);
-  };
+//   const deleteItem = (id) => {
+//     const res = facturas.filter((val) => val.id !== id);
+//     setFacturas(res);
+//     setAlert(2);
+//   };
 
-  const getFacturas = async () => {
-    let db = new Localbase("db");
-    try {
-      const facturas = await db.collection("facturas").get();
-      dispatch({ type: "SCYNC_FACTURAS", facturas: facturas.reverse() });
-      setFacturas(facturas);
-    } catch (error) {
-      console.log("error:", error);
-    }
-  };
+    const getFacturas = async () => {
+//   let db = new Localbase("db");
+  try {
+    // const facturas = await db.collection("facturas").get();
+    // dispatch({ type: "SCYNC_FACTURAS", facturas: facturas.reverse() });
+    const facturas =await getList("facturas");
+    console.log("🚀 ~ file: index.js:68 ~ getFacturas ~ facturas", facturas)
+    setFacturas(facturas);
+  } catch (error) {
+    console.log("error:", error);
+  }
+    };
 
-  useEffect(() => {
-    getFacturas();
-  }, []);
+    useEffect(() => {
+      getFacturas();
+    }, []);
 
-  useEffect(() => {
-    if (buscar === "") {
-      closeBuscar();
-    }
-  }, [buscar]);
-
+  //   useEffect(() => {
+  //     if (buscar === "") {
+  //       closeBuscar();
+  //     }
+  //   }, [buscar]);
 
   // useEffect(() => {
   //   if (alert === 1 || alert === 2) {
   //     setTimeout(() => setAlert(0), 6000);
   //   }
-  // },   
+  // },
   // [alert]);
-
 
   return (
     <>
-      <Buscar
-        flag={"facturas"}
-        payload={facturas.length}
-        handleChange={handleChange}
-        alerta={alert}
-      />
-      <Body 
-      flag={"facturas"} 
-      payload={existBusq?facturasB:facturas} 
-      deleteItem={deleteItem}
-       />
+      <AdminLayout>
+        <TablaProductos
+          nombre="Facturas"
+          urlAdicionar="/facturas/new"
+          columnas={columnNames}
+          data={facturas.items}
+        />
+      </AdminLayout>
     </>
   );
 };
@@ -161,7 +142,7 @@ export default Facturas;
 //             <Text h6>{total}</Text>
 //           </span>
 //         </Text>
-        
+
 //       </Row>
 
 //       <Row justify="center">

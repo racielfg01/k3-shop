@@ -9,8 +9,8 @@ function Header() {
         <Link href="/">
           <Image
             className="w-44 object-contain cursor-pointer"
-            width="170px"
-            height="50px"
+            width="170"
+            height="50"
             src={logo}
             alt="Logo de Medium"
           />
